@@ -1,8 +1,18 @@
 import { useEffect, useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { ArrowRight, ChevronDown, Filter, LocateFixed, Search, ShieldCheck } from "lucide-react";
+import {
+  ArrowRight,
+  ChevronDown,
+  Filter,
+  LocateFixed,
+  Plus,
+  Search,
+  ShieldCheck,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog } from "@/components/ui/dialog";
+import { toast } from "sonner";
+import { Toaster } from "@/components/ui/sonner";
 
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -14,9 +24,15 @@ import { CreateEventDialog } from "@/components/events/CreateEventDialog";
 import { TicketsView } from "@/components/tickets/TicketsView";
 import { OrganizerDesk } from "@/components/organizer/OrganizerDesk";
 
-import type { CampusEvent, EventCategory, Mode } from "@/types/event";
+import type { CampusEvent, CreateEventPayload, EventCategory, Mode } from "@/types/event";
 import { initialEvents } from "@/data/mockEvents";
-import { bookTickets, exportAttendeesCsv, getEvents, verifyTicket } from "@/services/api";
+import {
+  bookTickets,
+  createEvent,
+  exportAttendeesCsv,
+  getEvents,
+  verifyTicket,
+} from "@/services/api";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -83,11 +99,25 @@ function Index() {
     setBookedTicketCode(res.ticketCode);
     setBookedEvent(selectedEvent);
     setCheckoutStep("success");
+    toast.success("Booking confirmed! Ticket added to your wallet.");
   };
 
-  const handleAddEvent = (newEvent: CampusEvent) => {
-    setEvents((current) => [newEvent, ...current]);
+  const handleAddEvent = async (payload: CreateEventPayload) => {
+    const { event, isBackendLive } = await createEvent(payload);
+    setEvents((current) => [event, ...current]);
     setShowCreate(false);
+    setMode("explore");
+
+    if (isBackendLive) {
+      toast.success(`"${event.title}" published to live database!`);
+    } else {
+      toast.info(`"${event.title}" saved locally (backend offline).`);
+    }
+
+    // Smooth scroll down to the events feed to showcase the newly created event
+    setTimeout(() => {
+      document.getElementById("events")?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
   };
 
   return (
@@ -96,6 +126,7 @@ function Index() {
         mode={mode}
         hasBookedTicket={Boolean(bookedEvent)}
         onSelectMode={(newMode) => setMode(newMode)}
+        onHostEvent={() => setShowCreate(true)}
       />
 
       {mode === "organizer" ? (
@@ -136,9 +167,14 @@ function Index() {
                   No DMs. No screenshots. Just real events and tickets that work at the gate.
                 </p>
               </div>
-              <Button variant="outline" size="sm" className="self-start sm:self-auto">
-                <LocateFixed /> Near me <ChevronDown />
-              </Button>
+              <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto">
+                <Button variant="outline" size="sm">
+                  <LocateFixed /> Near me <ChevronDown />
+                </Button>
+                <Button size="sm" onClick={() => setShowCreate(true)}>
+                  <Plus className="mr-1.5 size-4" /> Host an event
+                </Button>
+              </div>
             </div>
 
             <div className="mt-9 flex flex-wrap items-center gap-2 border-b border-border pb-4">
@@ -232,8 +268,15 @@ function Index() {
       </Dialog>
 
       <Dialog open={showCreate} onOpenChange={setShowCreate}>
-        <CreateEventDialog onCreate={handleAddEvent} />
+        {showCreate ? (
+          <CreateEventDialog
+            onCreate={handleAddEvent}
+            onClose={() => setShowCreate(false)}
+          />
+        ) : null}
       </Dialog>
+
+      <Toaster position="bottom-right" />
     </main>
   );
 }

@@ -18,6 +18,19 @@ export type CampusEvent = {
   featured?: boolean;
 };
 
+export type CreateEventPayload = {
+  title: string;
+  organizer: string;
+  date: string;
+  dateShort: string;
+  time: string;
+  location: string;
+  price: number;
+  spots: number;
+  category: Exclude<EventCategory, "All events">;
+  description: string;
+};
+
 export type Attendee = {
   name: string;
   event: string;

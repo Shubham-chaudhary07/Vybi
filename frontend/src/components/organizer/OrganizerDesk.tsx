@@ -21,7 +21,7 @@ interface OrganizerDeskProps {
   events: CampusEvent[];
   onCreate: () => void;
   onDownload: () => void;
-  onVerifyTicket?: (code: string) => Promise<{ valid: boolean; attendeeName?: string }>;
+  onVerifyTicket?: (code: string) => Promise<{ valid: boolean; attendeeName?: string | undefined }>;
 }
 
 export function OrganizerDesk({

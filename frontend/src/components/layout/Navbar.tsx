@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Mode } from "@/types/event";
 
@@ -7,9 +7,10 @@ interface NavbarProps {
   mode: Mode;
   hasBookedTicket: boolean;
   onSelectMode: (mode: Mode) => void;
+  onHostEvent?: () => void;
 }
 
-export function Navbar({ mode, hasBookedTicket, onSelectMode }: NavbarProps) {
+export function Navbar({ mode, hasBookedTicket, onSelectMode, onHostEvent }: NavbarProps) {
   const [mobileNav, setMobileNav] = useState(false);
 
   const handleSelect = (newMode: Mode) => {
@@ -68,6 +69,11 @@ export function Navbar({ mode, hasBookedTicket, onSelectMode }: NavbarProps) {
           <span className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground">
             <span className="size-2 rounded-full bg-mint" /> North Campus
           </span>
+          {onHostEvent ? (
+            <Button size="sm" onClick={onHostEvent}>
+              <Plus className="mr-1 size-3.5" /> Host event
+            </Button>
+          ) : null}
           <Button variant="outline" size="sm" onClick={() => handleSelect("organizer")}>
             Organizer login
           </Button>
@@ -102,6 +108,18 @@ export function Navbar({ mode, hasBookedTicket, onSelectMode }: NavbarProps) {
           >
             For organizers
           </Button>
+          {onHostEvent ? (
+            <Button
+              size="sm"
+              className="mt-2 justify-center"
+              onClick={() => {
+                onHostEvent();
+                setMobileNav(false);
+              }}
+            >
+              <Plus className="mr-1.5 size-4" /> Host an event
+            </Button>
+          ) : null}
         </nav>
       ) : null}
     </header>
