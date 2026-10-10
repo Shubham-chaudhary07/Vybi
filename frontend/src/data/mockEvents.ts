@@ -1,0 +1,80 @@
+import type { Attendee, CampusEvent } from "@/types/event";
+
+export const initialEvents: CampusEvent[] = [
+  {
+    id: "pulse",
+    title: "Pulse: The Annual DJ Night",
+    organizer: "Cultural Committee",
+    date: "Friday, 18 October",
+    dateShort: "18 OCT",
+    time: "7:00 PM – 11:30 PM",
+    location: "Amphitheatre",
+    price: 299,
+    spots: 118,
+    category: "Music",
+    description:
+      "A night of live sets, campus food stalls, and the kind of energy you talk about all semester.",
+    poster: "coral",
+    featured: true,
+  },
+  {
+    id: "tedx",
+    title: "TEDx North Campus",
+    organizer: "Enactus North",
+    date: "Sunday, 20 October",
+    dateShort: "20 OCT",
+    time: "10:00 AM – 4:00 PM",
+    location: "Main Auditorium",
+    price: 499,
+    spots: 64,
+    category: "Culture",
+    description: "Ideas, people, and stories that move the campus forward.",
+    poster: "sun",
+  },
+  {
+    id: "hacknight",
+    title: "Hacknight 2026",
+    organizer: "Coding Club",
+    date: "Saturday, 26 October",
+    dateShort: "26 OCT",
+    time: "6:00 PM – 8:00 AM",
+    location: "Innovation Lab",
+    price: 149,
+    spots: 32,
+    category: "Tech",
+    description:
+      "Ship something weird, useful, or both. Teams, mentors, and midnight chai included.",
+    poster: "mint",
+  },
+  {
+    id: "run",
+    title: "Run For The Lake",
+    organizer: "Sports Board",
+    date: "Sunday, 27 October",
+    dateShort: "27 OCT",
+    time: "6:30 AM – 9:00 AM",
+    location: "East Gate",
+    price: 99,
+    spots: 207,
+    category: "Sports",
+    description: "A 5K campus run for clean water, fresh air, and a good cause.",
+    poster: "blue",
+  },
+];
+
+export const initialAttendees: Attendee[] = [
+  {
+    name: "Aarav Mehta",
+    event: "Pulse: The Annual DJ Night",
+    code: "VP-84K2",
+    status: "Checked in",
+  },
+  { name: "Ishita Rao", event: "Pulse: The Annual DJ Night", code: "VP-91M7", status: "Ready" },
+  { name: "Kabir Shah", event: "TEDx North Campus", code: "VP-20P4", status: "Ready" },
+  {
+    name: "Meera Nair",
+    event: "Pulse: The Annual DJ Night",
+    code: "VP-62A9",
+    status: "Checked in",
+  },
+];
