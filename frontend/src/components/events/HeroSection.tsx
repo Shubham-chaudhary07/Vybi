@@ -11,24 +11,24 @@ interface HeroSectionProps {
 
 export function HeroSection({ query, onQueryChange, onFindEvents }: HeroSectionProps) {
   return (
-    <section className="perspective-stage relative isolate min-h-[450px] overflow-hidden border-b border-foreground/10">
+    <section className="perspective-stage relative isolate min-h-[650px] overflow-hidden border-b border-foreground/10">
       <img
-        className="absolute inset-0 -z-20 size-full object-cover object-center grayscale"
+        className="absolute inset-0 -z-20 size-full object-cover object-center"
         src={campusNight}
         alt="Students enjoying a live campus event"
         width={1440}
         height={1080}
       />
-      <div className="absolute inset-0 -z-10 bg-gradient-to-t from-night via-night/80 to-night/40" />
-      <div className="mx-auto flex min-h-[450px] max-w-7xl items-end px-5 py-12 lg:px-10 lg:py-16">
+      <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/75 via-black/30 to-black/10" />
+      <div className="mx-auto flex min-h-[650px] max-w-7xl items-end px-5 py-12 lg:px-10 lg:py-16">
         <div className="max-w-3xl text-night-foreground">
-          <div className="mb-5 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-accent">
+          <div className="mb-5 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-white">
             <Sparkles className="size-4" /> North Campus · October 2026
           </div>
-          <h1 className="max-w-2xl font-display text-5xl font-black leading-[0.95] tracking-tight sm:text-7xl">
+          <h1 className="max-w-3xl font-display text-5xl font-black leading-[0.95] tracking-tight text-white sm:text-7xl">
             Your campus.
             <br />
-            <span className="text-accent">Your plans.</span>
+            Your plans. Your vibe.
           </h1>
           <p className="mt-6 max-w-lg text-base leading-7 text-night-foreground/75 sm:text-lg">
             Every event worth showing up for, in one trusted place. Find your people, book in

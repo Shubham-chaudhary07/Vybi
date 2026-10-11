@@ -8,9 +8,16 @@ interface NavbarProps {
   hasBookedTicket: boolean;
   onSelectMode: (mode: Mode) => void;
   onHostEvent?: () => void;
+  onSignIn?: () => void;
 }
 
-export function Navbar({ mode, hasBookedTicket, onSelectMode, onHostEvent }: NavbarProps) {
+export function Navbar({
+  mode,
+  hasBookedTicket,
+  onSelectMode,
+  onHostEvent,
+  onSignIn,
+}: NavbarProps) {
   const [mobileNav, setMobileNav] = useState(false);
 
   const handleSelect = (newMode: Mode) => {
@@ -18,8 +25,16 @@ export function Navbar({ mode, hasBookedTicket, onSelectMode, onHostEvent }: Nav
     setMobileNav(false);
   };
 
+  const isExplore = mode === "explore";
+
   return (
-    <header className="border-b border-border/70 bg-background">
+    <header
+      className={
+        isExplore
+          ? "absolute left-0 right-0 top-0 z-50 border-b border-white/10 bg-black/20 backdrop-blur-sm"
+          : "border-b border-border/70 bg-background"
+      }
+    >
       <div className="mx-auto flex min-h-20 max-w-7xl items-center justify-between px-5 lg:px-10">
         <Button
           type="button"
@@ -29,10 +44,14 @@ export function Navbar({ mode, hasBookedTicket, onSelectMode, onHostEvent }: Nav
           aria-label="Go to VibePass events"
         >
           <span className="depth-mark flex size-10 items-center justify-center rounded-xl bg-primary font-display text-sm font-black tracking-tight text-primary-foreground">
-            VP
+            V<span className="text-white">P</span>
           </span>
-          <span className="font-display text-[1.4rem] font-black tracking-tight">
-            Vibe<span className="text-accent">Pass</span>
+          <span
+            className={`font-display text-[1.4rem] font-black tracking-tight ${
+              isExplore ? "text-white" : ""
+            }`}
+          >
+            Vibe<span className={isExplore ? "text-white" : "text-accent"}>Pass</span>
           </span>
         </Button>
 
@@ -40,12 +59,13 @@ export function Navbar({ mode, hasBookedTicket, onSelectMode, onHostEvent }: Nav
           <Button
             variant={mode === "explore" ? "secondary" : "ghost"}
             size="sm"
+            className={isExplore && mode !== "explore" ? "text-white hover:text-white" : ""}
             onClick={() => handleSelect("explore")}
           >
             Explore events
           </Button>
           <Button
-            variant={mode === "tickets" ? "secondary" : "ghost"}
+            variant={mode === "tickets" ? "secondary" : isExplore ? "secondary" : "ghost"}
             size="sm"
             onClick={() => handleSelect("tickets")}
           >
@@ -57,7 +77,7 @@ export function Navbar({ mode, hasBookedTicket, onSelectMode, onHostEvent }: Nav
             ) : null}
           </Button>
           <Button
-            variant={mode === "organizer" ? "secondary" : "ghost"}
+            variant={mode === "organizer" ? "secondary" : isExplore ? "secondary" : "ghost"}
             size="sm"
             onClick={() => handleSelect("organizer")}
           >
@@ -66,7 +86,11 @@ export function Navbar({ mode, hasBookedTicket, onSelectMode, onHostEvent }: Nav
         </nav>
 
         <div className="hidden items-center gap-3 md:flex">
-          <span className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground">
+          <span
+            className={`flex items-center gap-1.5 text-xs font-semibold ${
+              isExplore ? "text-white" : "text-muted-foreground"
+            }`}
+          >
             <span className="size-2 rounded-full bg-mint" /> North Campus
           </span>
           {onHostEvent ? (
@@ -74,9 +98,20 @@ export function Navbar({ mode, hasBookedTicket, onSelectMode, onHostEvent }: Nav
               <Plus className="mr-1 size-3.5" /> Host event
             </Button>
           ) : null}
-          <Button variant="outline" size="sm" onClick={() => handleSelect("organizer")}>
-            Organizer login
-          </Button>
+          {onSignIn ? (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={onSignIn}
+              className="border-primary bg-primary text-white hover:bg-primary/90 hover:text-white"
+            >
+              Sign in
+            </Button>
+          ) : (
+            <Button variant="outline" size="sm" onClick={() => handleSelect("organizer")}>
+              Organizer login
+            </Button>
+          )}
         </div>
 
         <Button
@@ -118,6 +153,19 @@ export function Navbar({ mode, hasBookedTicket, onSelectMode, onHostEvent }: Nav
               }}
             >
               <Plus className="mr-1.5 size-4" /> Host an event
+            </Button>
+          ) : null}
+          {onSignIn ? (
+            <Button
+              size="sm"
+              variant="outline"
+              className="mt-1 justify-center border-primary bg-primary text-white hover:bg-primary/90 hover:text-white"
+              onClick={() => {
+                onSignIn();
+                setMobileNav(false);
+              }}
+            >
+              Sign in
             </Button>
           ) : null}
         </nav>

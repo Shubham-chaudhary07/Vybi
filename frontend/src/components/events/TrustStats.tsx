@@ -17,11 +17,10 @@ export function TrustStat({ value, label }: TrustStatProps) {
 export function TrustStatsBar() {
   return (
     <section className="border-b border-border bg-card">
-      <div className="mx-auto grid max-w-7xl grid-cols-2 divide-x divide-border px-5 py-5 sm:grid-cols-4 lg:px-10">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 divide-x divide-border px-5 py-5 sm:grid-cols-3 lg:px-10">
         <TrustStat value="18" label="events this month" />
         <TrustStat value="2.4k" label="tickets booked" />
         <TrustStat value="100%" label="verified organizers" />
-        <TrustStat value="0" label="fake tickets" />
       </div>
     </section>
   );

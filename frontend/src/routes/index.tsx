@@ -21,6 +21,7 @@ import { TrustStatsBar } from "@/components/events/TrustStats";
 import { EventCard } from "@/components/events/EventCard";
 import { EventDialog } from "@/components/events/EventDialog";
 import { CreateEventDialog } from "@/components/events/CreateEventDialog";
+import { LoginDialog } from "@/components/auth/LoginDialog";
 import { TicketsView } from "@/components/tickets/TicketsView";
 import { OrganizerDesk } from "@/components/organizer/OrganizerDesk";
 
@@ -66,6 +67,13 @@ function Index() {
   const [bookedEvent, setBookedEvent] = useState<CampusEvent | null>(null);
   const [bookedTicketCode, setBookedTicketCode] = useState<string>("VP-7N4Q");
   const [showCreate, setShowCreate] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
+  const [authMode, setAuthMode] = useState<"signin" | "signup" | "forgot">("signin");
+
+  const openLogin = (mode: "signin" | "signup" | "forgot" = "signin") => {
+    setAuthMode(mode);
+    setShowLogin(true);
+  };
 
   // Sync with backend API if running
   useEffect(() => {
@@ -127,6 +135,7 @@ function Index() {
         hasBookedTicket={Boolean(bookedEvent)}
         onSelectMode={(newMode) => setMode(newMode)}
         onHostEvent={() => setShowCreate(true)}
+        onSignIn={() => openLogin("signin")}
       />
 
       {mode === "organizer" ? (
@@ -272,6 +281,16 @@ function Index() {
           <CreateEventDialog
             onCreate={handleAddEvent}
             onClose={() => setShowCreate(false)}
+          />
+        ) : null}
+      </Dialog>
+
+      <Dialog open={showLogin} onOpenChange={setShowLogin}>
+        {showLogin ? (
+          <LoginDialog
+            mode={authMode}
+            onModeChange={setAuthMode}
+            onClose={() => setShowLogin(false)}
           />
         ) : null}
       </Dialog>

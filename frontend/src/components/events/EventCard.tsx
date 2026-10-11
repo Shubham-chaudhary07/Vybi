@@ -10,26 +10,24 @@ interface EventCardProps {
 export function EventCard({ event, onOpen }: EventCardProps) {
   return (
     <article className="depth-card group overflow-hidden rounded-xl border border-border bg-card shadow-sm">
-      <div
-        className={`poster-${event.poster} relative flex aspect-[1.18] flex-col justify-between overflow-hidden p-5`}
-      >
+      <div className="relative flex aspect-[1.18] flex-col justify-between overflow-hidden bg-black p-5">
         <div className="flex items-start justify-between">
-          <span className="inline-flex items-center rounded-md bg-background/85 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-foreground">
+          <span className="inline-flex items-center rounded-md bg-black text-white/85 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-foreground">
             {event.category}
           </span>
-          <span className="font-display text-right text-xs font-bold uppercase leading-4 opacity-70">
+          <span className="font-display text-right text-xs font-bold uppercase leading-4 opacity-70 text-white/70">
             {event.dateShort.split(" ")[0]}
             <br />
             {event.dateShort.split(" ")[1]}
           </span>
         </div>
         <div>
-          <div className="mb-2 h-px w-10 bg-current opacity-60" />
-          <h3 className="max-w-[13rem] font-display text-3xl font-black leading-[0.95] tracking-tight">
+          <div className="mb-2 h-px w-10 bg-current opacity-60 text-white" />
+          <h3 className="max-w-[13rem] font-display text-3xl font-black uppercase tracking-[-0.12em] text-white">
             {event.title}
           </h3>
         </div>
-        <div className="pointer-events-none absolute -bottom-8 -right-3 font-display text-[7rem] font-black leading-none opacity-10">
+        <div className="pointer-events-none absolute -bottom-8 -right-3 font-display text-[7rem] font-black leading-none opacity-10 text-white">
           {event.category[0]}
         </div>
       </div>
