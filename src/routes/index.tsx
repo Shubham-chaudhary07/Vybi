@@ -1,5 +1,6 @@
+import { createFileRoute } from '@tanstack/react-router'
 import { useMemo, useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+
 import {
   ArrowRight,
   BadgeCheck,
@@ -146,6 +147,13 @@ function Index() {
   const [bookedEvent, setBookedEvent] = useState<CampusEvent | null>(null);
   const [showCreate, setShowCreate] = useState(false);
   const [mobileNav, setMobileNav] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
+const [authMode, setAuthMode] = useState<"signin" | "signup" | "forgot">("signin");
+
+const openLogin = (mode: "signin" | "signup" | "forgot" = "signin") => {
+  setAuthMode(mode);
+  setShowLogin(true);
+};
 
   const visibleEvents = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -184,22 +192,51 @@ function Index() {
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-background text-foreground">
-      <header className="border-b border-border/70 bg-background">
+      <header className="absolute left-0 right-0 top-0 z-50 border-b border-white/10 bg-black/20 backdrop-blur-sm">
         <div className="mx-auto flex min-h-20 max-w-7xl items-center justify-between px-5 lg:px-10">
            <Button type="button" variant="ghost" className="h-auto gap-3 p-0 hover:bg-transparent" onClick={() => { setMode("explore"); setMobileNav(false); }} aria-label="Go to VibePass events">
-             <span className="depth-mark flex size-10 items-center justify-center rounded-xl bg-primary font-display text-sm font-black tracking-tight text-primary-foreground">VP</span>
-            <span className="font-display text-[1.4rem] font-black tracking-tight">Vibe<span className="text-accent">Pass</span></span>
+            <span className="depth-mark flex size-10 items-center justify-center rounded-xl bg-primary font-display text-sm font-black tracking-tight text-primary-foreground">
+  V<span className="text-white">P</span>
+</span>
+
+            <span className="font-display text-[1.4rem] font-black tracking-tight text-white">
+  Vibe<span className="text-white">Pass</span>
+</span>
           </Button>
 
           <nav className="hidden items-center gap-8 md:flex" aria-label="Main navigation">
             <Button variant={mode === "explore" ? "secondary" : "ghost"} size="sm" onClick={() => setMode("explore")}>Explore events</Button>
-            <Button variant={mode === "tickets" ? "secondary" : "ghost"} size="sm" onClick={() => setMode("tickets")}>My tickets {bookedEvent ? <span className="flex size-5 items-center justify-center rounded-full bg-primary text-[10px] text-primary-foreground">1</span> : null}</Button>
-            <Button variant={mode === "organizer" ? "secondary" : "ghost"} size="sm" onClick={() => setMode("organizer")}>For organizers</Button>
+            <Button
+  variant="secondary"
+  size="sm"
+  onClick={() => setMode("tickets")}
+>
+  My tickets
+  {bookedEvent ? (
+    <span className="flex size-5 items-center justify-center rounded-full bg-primary text-[10px] text-primary-foreground">
+      1
+    </span>
+  ) : null}
+</Button>
+            <Button
+  variant="secondary"
+  size="sm"
+  onClick={() => setMode("organizer")}
+>
+  For organizers
+</Button>
           </nav>
 
           <div className="hidden items-center gap-3 md:flex">
-            <span className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground"><span className="size-2 rounded-full bg-mint" /> North Campus</span>
-            <Button variant="outline" size="sm" onClick={() => setMode("organizer")}>Organizer login</Button>
+            <span className="flex items-center gap-1.5 text-xs font-semibold text-white"><span className="size-2 rounded-full bg-mint" /> North Campus</span>
+            <Button
+  variant="outline"
+  size="sm"
+  onClick={() => openLogin("signin")}
+  className="border-primary bg-primary text-white hover:bg-primary/90 hover:text-white"
+>
+  Sign in
+</Button>
           </div>
           <Button className="md:hidden" variant="ghost" size="icon" onClick={() => setMobileNav((open) => !open)} aria-label="Open navigation">
             {mobileNav ? <X /> : <Menu />}
@@ -220,13 +257,16 @@ function Index() {
         <TicketsView bookedEvent={bookedEvent} onExplore={() => setMode("explore")} onOpen={openEvent} />
       ) : (
         <>
-           <section className="perspective-stage relative isolate min-h-[450px] overflow-hidden border-b border-foreground/10">
-             <img className="absolute inset-0 -z-20 size-full object-cover object-center grayscale" src={campusNight} alt="Students enjoying a live campus event" width={1440} height={1080} />
-            <div className="absolute inset-0 -z-10 bg-gradient-to-t from-night via-night/80 to-night/40" />
-            <div className="mx-auto flex min-h-[450px] max-w-7xl items-end px-5 py-12 lg:px-10 lg:py-16">
+           <section className="perspective-stage relative isolate min-h-[650px] overflow-hidden border-b border-foreground/10">
+             <img className="absolute inset-0 -z-20 size-full object-cover object-center" src={campusNight} alt="Students enjoying a live campus event" width={1440} height={1080} />
+            <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/75 via-black/30 to-black/10" />
+            <div className="mx-auto flex min-h-[650px]  max-w-7xl items-end px-5 py-12 lg:px-10 lg:py-16">
               <div className="max-w-3xl text-night-foreground">
-                <div className="mb-5 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-accent"><Sparkles className="size-4" /> North Campus · October 2026</div>
-                <h1 className="max-w-2xl font-display text-5xl font-black leading-[0.95] tracking-tight sm:text-7xl">Your campus.<br /><span className="text-accent">Your plans.</span></h1>
+                <div className="mb-5 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-white"><Sparkles className="size-4" /> North Campus · October 2026</div>
+  <h1 className="max-w-3xl font-display text-5xl font-black leading-[0.95] tracking-tight text-white sm:text-7xl">
+  Your campus.<br />
+  Your plans. Your vibe.
+</h1>
                 <p className="mt-6 max-w-lg text-base leading-7 text-night-foreground/75 sm:text-lg">Every event worth showing up for, in one trusted place. Find your people, book in seconds, and walk in with confidence.</p>
                  <div className="depth-panel mt-8 flex max-w-xl items-center gap-3 rounded-xl border border-border bg-card p-2">
                   <Search className="ml-3 size-5 shrink-0 text-muted-foreground" />
@@ -238,7 +278,7 @@ function Index() {
           </section>
 
           <section className="border-b border-border bg-card">
-            <div className="mx-auto grid max-w-7xl grid-cols-2 divide-x divide-border px-5 py-5 sm:grid-cols-4 lg:px-10">
+          <div className="mx-auto grid max-w-7xl grid-cols-1 divide-x divide-border px-5 py-5 sm:grid-cols-3 lg:px-10">
               <TrustStat value="18" label="events this month" />
               <TrustStat value="2.4k" label="tickets booked" />
               <TrustStat value="100%" label="verified organizers" />
@@ -290,6 +330,13 @@ function Index() {
       <Dialog open={showCreate} onOpenChange={setShowCreate}>
         <CreateEventDialog onCreate={addEvent} />
       </Dialog>
+      <Dialog open={showLogin} onOpenChange={setShowLogin}>
+  <LoginDialog
+    mode={authMode}
+    onModeChange={setAuthMode}
+    onClose={() => setShowLogin(false)}
+  />
+</Dialog>
     </main>
   );
 }
@@ -301,9 +348,9 @@ function TrustStat({ value, label }: { value: string; label: string }) {
 function EventCard({ event, onOpen }: { event: CampusEvent; onOpen: (event: CampusEvent) => void }) {
   return (
     <article className="depth-card group overflow-hidden rounded-xl border border-border bg-card shadow-sm">
-      <div className={`poster-${event.poster} relative flex aspect-[1.18] flex-col justify-between overflow-hidden p-5`}>
-        <div className="flex items-start justify-between"><span className="inline-flex items-center rounded-md bg-background/85 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-foreground">{event.category}</span><span className="font-display text-right text-xs font-bold uppercase leading-4 opacity-70">{event.dateShort.split(" ")[0]}<br />{event.dateShort.split(" ")[1]}</span></div>
-        <div><div className="mb-2 h-px w-10 bg-current opacity-60" /><h3 className="max-w-[13rem] font-display text-3xl font-black leading-[0.95] tracking-tight">{event.title}</h3></div>
+     <div className="relative flex aspect-[1.18] flex-col justify-between overflow-hidden bg-black p-5">
+        <div className="flex items-start justify-between"><span className="inline-flex items-center rounded-md bg-black text-white/85 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-foreground">{event.category}</span><span className="font-display text-right text-xs font-bold uppercase leading-4 opacity-70">{event.dateShort.split(" ")[0]}<br />{event.dateShort.split(" ")[1]}</span></div>
+        <div><div className="mb-2 h-px w-10 bg-current opacity-60" /><h3 className="max-w-[13rem] font-display text-3xl font-black uppercase tracking-[-0.12em] text-white">{event.title}</h3></div>
         <div className="pointer-events-none absolute -bottom-8 -right-3 font-display text-[7rem] font-black leading-none opacity-10">{event.category[0]}</div>
       </div>
       <div className="p-5"><div className="flex items-center gap-2 text-xs text-muted-foreground"><CalendarDays className="size-3.5" /> {event.date}</div><h3 className="mt-2 line-clamp-2 min-h-12 font-display text-lg font-bold leading-6">{event.title}</h3><div className="mt-3 flex items-center gap-2 text-xs text-muted-foreground"><MapPin className="size-3.5" /> {event.location}</div><div className="mt-5 flex items-center justify-between border-t border-border pt-4"><div><span className="text-xs text-muted-foreground">from</span> <span className="font-display text-lg font-black">₹{event.price}</span></div><Button size="sm" onClick={() => onOpen(event)}>Get tickets <ArrowRight className="transition-transform group-hover:translate-x-0.5" /></Button></div></div>
@@ -356,4 +403,191 @@ function CreateEventDialog({ onCreate }: { onCreate: (event: CampusEvent) => voi
   const [title, setTitle] = useState("");
   const [date, setDate] = useState("");
   return <DialogContent className="max-w-md border-border bg-background"><DialogHeader><DialogTitle className="font-display text-3xl">Create an event</DialogTitle><DialogDescription>Put the essentials in first. You can add the details later.</DialogDescription></DialogHeader><form className="mt-5 space-y-4" onSubmit={(formEvent) => { formEvent.preventDefault(); onCreate({ id: `new-${Date.now()}`, title, organizer: "Your organizer account", date: date || "Saturday, 2 November", dateShort: "02 NOV", time: "7:00 PM – 10:00 PM", location: "Main Quadrangle", price: 199, spots: 100, category: "Culture", description: "A new event on North Campus.", poster: "sun" }); }}><label className="block text-sm font-semibold">Event name<Input value={title} onChange={(event) => setTitle(event.target.value)} required className="mt-2" placeholder="e.g. Open Mic Night" /></label><label className="block text-sm font-semibold">Date<Input value={date} onChange={(event) => setDate(event.target.value)} className="mt-2" placeholder="e.g. Saturday, 2 November" /></label><Button className="mt-3 w-full" size="lg" type="submit">Publish event <ArrowRight /></Button></form></DialogContent>;
+}
+function LoginDialog({
+  mode,
+  onModeChange,
+  onClose,
+}: {
+  mode: "signin" | "signup" | "forgot";
+  onModeChange: (mode: "signin" | "signup" | "forgot") => void;
+  onClose: () => void;
+}) {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (mode === "signin") {
+      alert("Sign in successful! (Demo)");
+      onClose();
+    }
+
+    if (mode === "signup") {
+      alert("Account created successfully! (Demo)");
+      onClose();
+    }
+
+    if (mode === "forgot") {
+      alert("Password reset link sent! (Demo)");
+    }
+  };
+
+  const handleGoogleLogin = () => {
+    alert("Google login will be connected later.");
+  };
+
+  return (
+    <DialogContent className="max-w-md border-border bg-background">
+      <DialogHeader>
+        <DialogTitle className="font-display text-3xl font-black">
+          {mode === "signin"
+            ? "Welcome back."
+            : mode === "signup"
+              ? "Create your account."
+              : "Forgot password?"}
+        </DialogTitle>
+
+        <DialogDescription>
+          {mode === "signin"
+            ? "Sign in to manage your tickets and events."
+            : mode === "signup"
+              ? "Create your VibePass account in a few seconds."
+              : "Enter your email and we'll send you a reset link."}
+        </DialogDescription>
+      </DialogHeader>
+
+      {mode === "forgot" ? (
+        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+          <label className="block text-sm font-semibold">
+            Email address
+            <Input
+              required
+              type="email"
+              className="mt-2"
+              placeholder="you@example.com"
+            />
+          </label>
+
+          <Button className="w-full" size="lg" type="submit">
+            Send reset link
+          </Button>
+
+          <button
+            type="button"
+            onClick={() => onModeChange("signin")}
+            className="w-full text-sm font-semibold text-primary hover:underline"
+          >
+            ← Back to Sign in
+          </button>
+        </form>
+      ) : (
+        <>
+          <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+            {mode === "signup" && (
+              <label className="block text-sm font-semibold">
+                Full name
+                <Input
+                  required
+                  className="mt-2"
+                  placeholder="Your name"
+                />
+              </label>
+            )}
+
+            <label className="block text-sm font-semibold">
+              Email address
+              <Input
+                required
+                type="email"
+                className="mt-2"
+                placeholder="you@example.com"
+              />
+            </label>
+
+            <label className="block text-sm font-semibold">
+              Password
+              <Input
+                required
+                type="password"
+                className="mt-2"
+                placeholder="••••••••"
+              />
+            </label>
+
+            {mode === "signup" && (
+              <label className="block text-sm font-semibold">
+                Confirm password
+                <Input
+                  required
+                  type="password"
+                  className="mt-2"
+                  placeholder="••••••••"
+                />
+              </label>
+            )}
+
+            {mode === "signin" && (
+              <div className="flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => onModeChange("forgot")}
+                  className="text-sm font-semibold text-primary hover:underline"
+                >
+                  Forgot password?
+                </button>
+              </div>
+            )}
+
+            <Button className="w-full" size="lg" type="submit">
+              {mode === "signin" ? "Sign in" : "Create account"}
+            </Button>
+          </form>
+
+          <div className="my-6 flex items-center gap-3">
+            <div className="h-px flex-1 bg-border" />
+            <span className="text-xs font-semibold text-muted-foreground">
+              OR
+            </span>
+            <div className="h-px flex-1 bg-border" />
+          </div>
+
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full"
+            size="lg"
+            onClick={handleGoogleLogin}
+          >
+            <span className="font-bold text-lg">G</span>
+            Continue with Google
+          </Button>
+
+          <div className="mt-6 text-center text-sm text-muted-foreground">
+            {mode === "signin" ? (
+              <>
+                Don't have an account?{" "}
+                <button
+                  type="button"
+                  onClick={() => onModeChange("signup")}
+                  className="font-bold text-primary hover:underline"
+                >
+                  Sign up
+                </button>
+              </>
+            ) : (
+              <>
+                Already have an account?{" "}
+                <button
+                  type="button"
+                  onClick={() => onModeChange("signin")}
+                  className="font-bold text-primary hover:underline"
+                >
+                  Sign in
+                </button>
+              </>
+            )}
+          </div>
+        </>
+      )}
+    </DialogContent>
+  );
 }
