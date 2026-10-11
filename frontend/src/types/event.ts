@@ -35,7 +35,7 @@ export type Attendee = {
   name: string;
   event: string;
   code: string;
-  status: "Checked in" | "Ready";
+  status: "Checked in" | "Ready" | "Confirmed" | string;
 };
 
 export type BookingRequest = {
@@ -44,20 +44,26 @@ export type BookingRequest = {
   quantity: number;
 };
 
+export type TicketResponse = {
+  code: string;
+  event: string;
+  attendeeName: string;
+  status: "READY" | "CHECKED_IN" | "CANCELLED" | string;
+  checkedInAt?: string | null;
+};
+
 export type BookingResponse = {
-  bookingId: number;
+  id: number;
+  event: string;
   attendeeName: string;
   email: string;
-  eventTitle: string;
-  tickets: Array<{
-    ticketCode: string;
-    status: string;
-  }>;
+  quantity: number;
+  totalAmount: number;
+  tickets: TicketResponse[];
 };
 
 export type OrganizerSummary = {
   liveEvents: number;
   ticketsSold: number;
   checkedIn: number;
-  grossSales: string;
 };

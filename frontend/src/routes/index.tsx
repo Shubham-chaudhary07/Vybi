@@ -107,7 +107,11 @@ function Index() {
     setBookedTicketCode(res.ticketCode);
     setBookedEvent(selectedEvent);
     setCheckoutStep("success");
-    toast.success("Booking confirmed! Ticket added to your wallet.");
+    if (res.isBackendLive) {
+      toast.success(`Booking confirmed in database! Ticket code: ${res.ticketCode}`);
+    } else {
+      toast.info(`Booking saved locally. Ticket code: ${res.ticketCode}`);
+    }
   };
 
   const handleAddEvent = async (payload: CreateEventPayload) => {
